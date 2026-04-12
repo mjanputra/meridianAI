@@ -1,4 +1,10 @@
 venv/
+robotenv/
 .env
 __pycache__/
 *.pyc
+*.pyo
+.DS_Store
+*.csv
+*.log
+EOF
