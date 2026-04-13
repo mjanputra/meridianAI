@@ -6,7 +6,7 @@ from pathlib import Path
 load_dotenv(Path(__file__).parent.parent / '.env')
 
 # Load dataframe
-df = pd.read_csv('../db/4.12.bts_sha_lax.csv',
+df = pd.read_csv(Path(__file__).parent.parent / 'db' / '4.12.bts_sha_lax.csv',
                  encoding='utf-16',
                  sep='\t'
                  )
@@ -16,7 +16,15 @@ print("Shape:", df.shape)
 print(df.head(3))
 
 # Clean the data - Keep only what we need
-df = df[['Date', "Rate"]].copy()
+df = df[['Date','Origin', "Rate"]].copy()
+
+# ← Add this line — keep only LA rows
+df = df[df['Origin'] == 'U.S. West Coast (Los Angeles)']
+
+# Parse date
+df['observed_date'] = pd.to_datetime(
+    df['Date'].str.replace('12:00:00 a.m.', '').str.strip()
+).dt.date
 
 # Parse the date — strip the time portion
 df['observed_date'] = pd.to_datetime(
